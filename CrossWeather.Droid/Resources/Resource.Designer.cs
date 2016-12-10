@@ -72,6 +72,9 @@ namespace CrossWeather.Droid
 			// aapt resource value: 0x7f050003
 			public const int lon = 2131034115;
 			
+			// aapt resource value: 0x7f050007
+			public const int progressBar = 2131034119;
+			
 			// aapt resource value: 0x7f050002
 			public const int search = 2131034114;
 			

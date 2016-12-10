@@ -1,19 +1,16 @@
 ﻿using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CrossWeather.Core
 {
     public class WeatherRepository
     {
-        private string url;
+        private string Url;
         public WeatherRepository(string city)
         {
-            url = ApiSetting.GetUrl(city);
+            Url = ApiSetting.GetUrl(city);
 
         }
 
@@ -22,14 +19,17 @@ namespace CrossWeather.Core
             WeatherRoot WeatherRoot = null;
             try
             {
-                using (var HttpClient = new HttpClient())
+                var HttpClient = new HttpClient();
+                var Json = await DoRequestWithIntents(HttpClient);
+                HttpClient.Dispose();
+
+                if (Json.Equals(string.Empty))
+                    throw new Exception();
+
+                await Task.Run(() =>
                 {
-                    var json = await HttpClient.GetStringAsync(url);
-                    await Task.Run(() =>
-                    {
-                        WeatherRoot = JsonConvert.DeserializeObject<WeatherRoot>(json);
-                    });
-                }
+                    WeatherRoot = JsonConvert.DeserializeObject<WeatherRoot>(Json);
+                });
             }
             catch (Exception e)
             {
@@ -37,6 +37,25 @@ namespace CrossWeather.Core
             }
             
             return WeatherRoot;
+        }
+
+        private async Task<string> DoRequestWithIntents(HttpClient HttpClient)
+        {
+            var Json = string.Empty;
+            var Intents = 5;
+            while (Intents > 0)
+            {
+                try
+                {
+                    Json = await HttpClient.GetStringAsync(Url);
+                    return Json;
+                }
+                catch (Exception)
+                {
+                    Intents--;
+                }
+            }
+            return Json;
         }
     }
 }

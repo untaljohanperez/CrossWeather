@@ -27,10 +27,14 @@ namespace CrossWeather.Droid
             TextView lon = FindViewById<TextView>(Resource.Id.lon);
             TextView temp = FindViewById<TextView>(Resource.Id.temp);
             TextView country = FindViewById<TextView>(Resource.Id.country);
+            ProgressBar progressBar = FindViewById<ProgressBar>(Resource.Id.progressBar);
+            progressBar.Visibility = ViewStates.Gone;
+
             button.Click += async delegate 
             {
                 try
                 {
+                    progressBar.Visibility = ViewStates.Visible;
                     var WeatherRepository = new WeatherRepository(city.Text);
                     var Weather = await WeatherRepository.GetWeather();
                     if(Weather?.Id == 0)
@@ -42,10 +46,12 @@ namespace CrossWeather.Droid
                     lat.Text = $"Latitude: {Weather.Coord.Lat}";
                     temp.Text = $"Temperature: {Weather.Main.Temp}";
                     country.Text = $"Country: {Weather.Sys.Country}";
+                    progressBar.Visibility = ViewStates.Gone;
                 }
                 catch (Exception)
                 {
                     city.Text = string.Empty;
+                    progressBar.Visibility = ViewStates.Gone;
                     Toast.MakeText(this, "There was a error. Try again", ToastLength.Short).Show();
                 }
             };
