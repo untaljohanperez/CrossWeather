@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace CrossWeather.Core
+namespace CrossWeather.Core.Models
 {
     public class WeatherRoot
     {

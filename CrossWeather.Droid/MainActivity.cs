@@ -1,11 +1,9 @@
 ﻿using System;
 using Android.App;
-using Android.Content;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
-using CrossWeather.Core;
+using CrossWeather.Core.Repository;
 
 namespace CrossWeather.Droid
 {

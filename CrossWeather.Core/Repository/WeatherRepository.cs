@@ -2,8 +2,10 @@
 using System;
 using System.Net.Http;
 using System.Threading.Tasks;
+using CrossWeather.Core.Models;
+using CrossWeather.Core.Util;
 
-namespace CrossWeather.Core
+namespace CrossWeather.Core.Repository
 {
     public class WeatherRepository
     {
@@ -20,10 +22,12 @@ namespace CrossWeather.Core
             try
             {
                 var HttpClient = new HttpClient();
-                var Json = await DoRequestWithIntents(HttpClient);
+                string Json = await RetryHelper.RetryOnExceptionAsync<string>(3, TimeSpan.FromSeconds(10), async () => {
+                    return await HttpClient.GetStringAsync(Url);
+                });
                 HttpClient.Dispose();
 
-                if (Json.Equals(string.Empty))
+                if (Json?.Length == 0)
                     throw new Exception();
 
                 await Task.Run(() =>
@@ -34,28 +38,8 @@ namespace CrossWeather.Core
             catch (Exception e)
             {
                 throw e;
-            }
-            
+            }       
             return WeatherRoot;
-        }
-
-        private async Task<string> DoRequestWithIntents(HttpClient HttpClient)
-        {
-            var Json = string.Empty;
-            var Intents = 5;
-            while (Intents > 0)
-            {
-                try
-                {
-                    Json = await HttpClient.GetStringAsync(Url);
-                    return Json;
-                }
-                catch (Exception)
-                {
-                    Intents--;
-                }
-            }
-            return Json;
         }
     }
 }

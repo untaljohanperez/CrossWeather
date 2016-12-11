@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CrossWeather.Core
+namespace CrossWeather.Core.Repository
 {
     public class ApiSetting
     {
         public static string GetUrl(String city)
         {
             var ApiKey = "52f9dfc8129e47f246d3f79cd0ea4423";
-            return $"http://api.openweathermap.org/data/2.5/weather?q={city}&APPID={ApiKey}";
+            return $"http://api.openweathermap.org/data/2.5/weather?q={city}&units=metric&APPID={ApiKey}";
         }
     }
 }

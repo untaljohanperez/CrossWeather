@@ -1,4 +1,4 @@
-﻿namespace CrossWeather.Core
+﻿namespace CrossWeather.Core.Models
 {
     public class Cloud
     {
